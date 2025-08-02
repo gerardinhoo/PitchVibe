@@ -7,7 +7,7 @@ import Navbar from './components/Navbar';
 
 const App = () => {
   return (
-    <>
+    <div className='min-h-screen bg-gradient-to-br from-indigo-500 via-blue-500 to-indigo-700 text-white'>
       <Navbar />
       <Routes>
         <Route path='/' element={<Home />} />
@@ -15,7 +15,7 @@ const App = () => {
         <Route path='/profile' element={<Profile />} />
         <Route path='/match/:id' element={<MatchDetails />} />
       </Routes>
-    </>
+    </div>
   );
 };
 
