@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react'; // or use heroicons if you prefer
 
-export default function Navbar() {
+const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -39,8 +39,13 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
+            <Link to='/match' className='hover:underline'>
+              Matches
+            </Link>
+          </li>
+          <li>
             <Link to='/match/10' className='hover:underline'>
-              Match
+              Match Details
             </Link>
           </li>
         </ul>
@@ -71,8 +76,13 @@ export default function Navbar() {
               </Link>
             </li>
             <li>
+              <Link to='/match' onClick={toggleMenu} className='block'>
+                Matches
+              </Link>
+            </li>
+            <li>
               <Link to='/match/10' onClick={toggleMenu} className='block'>
-                Match
+                Match Details
               </Link>
             </li>
           </ul>
@@ -80,4 +90,6 @@ export default function Navbar() {
       )}
     </nav>
   );
-}
+};
+
+export default Navbar;

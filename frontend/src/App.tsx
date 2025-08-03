@@ -3,6 +3,7 @@ import Home from '../pages/Home';
 import Login from '../pages/Login';
 import MatchDetails from '../pages/MatchDetails';
 import Profile from '../pages/Profile';
+import Matches from '../pages/Matches';
 import Navbar from './components/Navbar';
 
 const App = () => {
@@ -14,6 +15,7 @@ const App = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/match/:id' element={<MatchDetails />} />
+        <Route path='/match' element={<Matches />} />
       </Routes>
     </div>
   );
