@@ -5,6 +5,7 @@ import MatchDetails from '../pages/MatchDetails';
 import Profile from '../pages/Profile';
 import Matches from '../pages/Matches';
 import Navbar from './components/Navbar';
+import CreateMatch from '../pages/CreateMatch';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route path='/profile' element={<Profile />} />
         <Route path='/match/:id' element={<MatchDetails />} />
         <Route path='/match' element={<Matches />} />
+        <Route path='/match/create' element={<CreateMatch />} />
       </Routes>
     </div>
   );

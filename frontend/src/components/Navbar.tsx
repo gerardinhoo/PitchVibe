@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react'; // or use heroicons if you prefer
+import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,6 +46,11 @@ const Navbar = () => {
           <li>
             <Link to='/match/10' className='hover:underline'>
               Match Details
+            </Link>
+          </li>
+          <li>
+            <Link to='/match/create' className='hover:underline'>
+              Create Match
             </Link>
           </li>
         </ul>
