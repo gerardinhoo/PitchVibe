@@ -6,6 +6,7 @@ import Profile from '../pages/Profile';
 import Matches from '../pages/Matches';
 import Navbar from './components/Navbar';
 import CreateMatch from '../pages/CreateMatch';
+import AdminMatchList from '../pages/admin/AdminMatchList';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path='/match/:id' element={<MatchDetails />} />
         <Route path='/match' element={<Matches />} />
         <Route path='/match/create' element={<CreateMatch />} />
+        <Route path='/admin/matches' element={<AdminMatchList />} />
       </Routes>
     </div>
   );

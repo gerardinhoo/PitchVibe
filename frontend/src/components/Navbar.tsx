@@ -53,6 +53,11 @@ const Navbar = () => {
               Create Match
             </Link>
           </li>
+          <li>
+            <Link to='/admin/matches' className='hover:underline'>
+              Admin Matches
+            </Link>
+          </li>
         </ul>
 
         {/* Mobile Menu Toggle */}
