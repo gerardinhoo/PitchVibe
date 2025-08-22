@@ -7,6 +7,7 @@ import Matches from '../pages/Matches';
 import Navbar from './components/Navbar';
 import CreateMatch from '../pages/CreateMatch';
 import AdminMatchList from '../pages/admin/AdminMatchList';
+import EditMatches from '../pages/EditMatches';
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
         <Route path='/match' element={<Matches />} />
         <Route path='/match/create' element={<CreateMatch />} />
         <Route path='/admin/matches' element={<AdminMatchList />} />
+        <Route path='/admin/match/:id/edit' element={<EditMatches />} />
       </Routes>
     </div>
   );

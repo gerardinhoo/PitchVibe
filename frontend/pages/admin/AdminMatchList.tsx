@@ -1,14 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { upcomingMatches } from '../../data/upcomingMatches';
+import { upcomingMatches as initialMatches } from '../../data/upcomingMatches';
 
 const AdminMatchList = () => {
+  const [matches, setMatches] = useState(initialMatches);
+
+  const handleDelete = (id: number) => {
+    const confirmDelete = window.confirm(
+      'Are you sure you want to delete this match?'
+    );
+
+    if (!confirmDelete) return;
+
+    const updatedMatches = matches.filter((match) => match.id !== id);
+    setMatches(updatedMatches);
+  };
+
   return (
     <div className='p-6'>
       <h2 className='text-3xl font-bold mb-6'>All Matches (Admin View)</h2>
-      {upcomingMatches.map((match, index) => (
+
+      {matches.length === 0 && (
+        <p className='text-gray-400'>No Matches Available</p>
+      )}
+
+      {matches.map((match) => (
         <div
-          key={index}
+          key={match.id}
           className='bg-white text-black p-4 rounded shadow mb-4 flex justify-between items-center'
         >
           <div>
@@ -26,9 +44,18 @@ const AdminMatchList = () => {
             >
               View
             </Link>
-            {/* Future Actions */}
-            <button className='text-yellow-700 hover:underline'>Edit</button>
-            <button className='text-red-600 hover:underline'>Delete</button>
+            <Link
+              to={`/admin/match/${match.id}/edit`}
+              className='text-yellow-700 hover:underline'
+            >
+              Edit
+            </Link>
+            <button
+              onClick={() => handleDelete(match.id)}
+              className='text-red-600 hover:underline'
+            >
+              Delete
+            </button>
           </div>
         </div>
       ))}
