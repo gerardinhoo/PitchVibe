@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { upcomingMatches as initialMatches } from '../../data/upcomingMatches';
+import { upcomingMatches as initialMatches } from '../../../data/upcomingMatches';
 
 const AdminMatchList = () => {
   const [matches, setMatches] = useState(initialMatches);

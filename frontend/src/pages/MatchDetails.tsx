@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { upcomingMatches } from '../data/upcomingMatches';
+import { upcomingMatches } from '../../data/upcomingMatches';
 import { Link } from 'react-router-dom';
 
 const MatchDetails = () => {

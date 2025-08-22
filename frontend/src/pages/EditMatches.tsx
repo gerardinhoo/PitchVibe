@@ -2,8 +2,8 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { upcomingMatches } from '../data/upcomingMatches';
-import { teams } from '../data/teams';
+import { upcomingMatches } from '../../data/upcomingMatches';
+import { teams } from '../../data/teams';
 
 type MatchFormData = {
   homeTeam: string;

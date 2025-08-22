@@ -1,13 +1,13 @@
 import { Routes, Route } from 'react-router-dom';
-import Home from '../pages/Home';
-import Login from '../pages/Login';
-import MatchDetails from '../pages/MatchDetails';
-import Profile from '../pages/Profile';
-import Matches from '../pages/Matches';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import MatchDetails from './pages/MatchDetails';
+import Profile from './pages/Profile';
+import Matches from './pages/Matches';
 import Navbar from './components/Navbar';
-import CreateMatch from '../pages/CreateMatch';
-import AdminMatchList from '../pages/admin/AdminMatchList';
-import EditMatches from '../pages/EditMatches';
+import CreateMatch from './pages/CreateMatch';
+import AdminMatchList from './pages/admin/AdminMatchList';
+import EditMatches from './pages/EditMatches';
 
 const App = () => {
   return (
