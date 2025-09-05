@@ -23,3 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 .vite
+
+# Local env files
+frontend/.env
+backend/.env
+
+# Local env files
+frontend/.env
+backend/.env

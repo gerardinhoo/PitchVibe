@@ -39,7 +39,7 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link to='/match' className='hover:underline'>
+            <Link to='/matches' className='hover:underline'>
               Matches
             </Link>
           </li>
@@ -86,12 +86,12 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to='/match' onClick={toggleMenu} className='block'>
+              <Link to='/matches' onClick={toggleMenu} className='block'>
                 Matches
               </Link>
             </li>
             <li>
-              <Link to='/match/10' onClick={toggleMenu} className='block'>
+              <Link to='/matches/10' onClick={toggleMenu} className='block'>
                 Match Details
               </Link>
             </li>
