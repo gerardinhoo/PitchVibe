@@ -1,13 +1,38 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { upcomingMatches } from '../../data/upcomingMatches';
-import { Link } from 'react-router-dom';
+import { fetchMatch, type Match } from '../api/matches';
 
 const MatchDetails = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const [match, setMatch] = useState<Match | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const matchId = Number(id);
-  const match = upcomingMatches.find((m) => m.id === matchId);
+  useEffect(() => {
+    if (!id) return;
+    const controller = new AbortController();
+    setLoading(true);
+    setError(null);
+
+    fetchMatch(id, controller.signal)
+      .then(setMatch)
+      .catch((e: any) => {
+        const isAbort =
+          e?.name === 'AbortError' ||
+          String(e?.message || '')
+            .toLowerCase()
+            .includes('abort');
+        if (!isAbort) setError(e?.message || 'Unknown error');
+      })
+      .finally(() => setLoading(false));
+
+    return () => controller.abort();
+  }, [id]);
+
+  if (!id) return <p className='p-6'>Invalid Match Id.</p>;
+  if (loading) return <p className='p-6 text-gray-500'>Loading match…</p>;
 
   if (!match) {
     return (
@@ -26,18 +51,21 @@ const MatchDetails = () => {
   }
 
   return (
-    <div className='flex justify-center items-center min-h-[70vh] px-4'>
-      <div className='bg-white text-black rounded-lg shadow-lg p-6 max-w-xl w-full'>
-        <h2 className='text-2xl font-bold flex items-center gap-2 mb-4'>
-          ⚽ {match.homeTeam} vs {match.awayTeam}
-        </h2>
-        <p className='flex items-center gap-2 text-gray-800 mb-2'>
-          📅 {match.matchDateAndTime.toLocaleString()}
-        </p>
-        <p className='flex items-center gap-2 text-gray-800'>
-          🏟️ {match.location}
-        </p>
-      </div>
+    <div className='p-6'>
+      <h2 className='text-2xl font-bold mb-2'>
+        ⚽️ {match.homeTeam} vs {match.awayTeam}
+      </h2>
+      <p className='text-sm text-gray-700 flex items-center gap-2'>
+        📅 {new Date(match.matchDateAndTime).toLocaleString()} –{' '}
+        {match.location}
+      </p>
+      <p className='text-sm text-gray-700 mt-2'>🏟️ {match.location}</p>
+      <Link
+        to='/matches'
+        className='text-indigo-600 underline mt-4 inline-block'
+      >
+        ← Back to matches
+      </Link>
     </div>
   );
 };
