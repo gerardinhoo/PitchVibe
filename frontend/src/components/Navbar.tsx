@@ -1,9 +1,17 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import { getToken, logout } from '../api/auth';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const nav = useNavigate();
+  const authed = !!getToken();
+
+  const doLogout = () => {
+    logout();
+    nav('/');
+  };
 
   return (
     <nav className='bg-indigo-600 text-white px-4 py-3'>
@@ -28,9 +36,15 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link to='/login' className='hover:underline'>
-              Login
-            </Link>
+            {authed ? (
+              <button onClick={doLogout} className='hover:underline'>
+                Logout
+              </button>
+            ) : (
+              <Link to='/login' className='hover:underline'>
+                Login
+              </Link>
+            )}
           </li>
           <li>
             <Link to='/profile' className='hover:underline'>

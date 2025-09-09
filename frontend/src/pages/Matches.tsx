@@ -35,11 +35,11 @@ export default function Matches() {
 
   return (
     <div className='p-6'>
-      <h2 className='text-2xl font-bold mb-4'>
+      <h2 className='text-2xl font-bold mb-4 text-white'>
         Upcoming Premier League Matches
       </h2>
 
-      {loading && <p className='text-gray-500'>Loading upcoming matches…</p>}
+      {loading && <p className='text-white-600'>Loading upcoming matches…</p>}
 
       {error && (
         <div className='bg-red-50 text-red-700 p-4 rounded mb-4'>
@@ -54,7 +54,7 @@ export default function Matches() {
       )}
 
       {!loading && !error && matches && matches.length === 0 && (
-        <p className='text-gray-500'>No upcoming matches yet.</p>
+        <p className='text-white-500'>No upcoming matches yet.</p>
       )}
 
       {!loading && !error && matches && matches.length > 0 && (

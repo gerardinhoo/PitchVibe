@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import MatchForm from '../components/MatchForm';
-import { createMatch } from '../api/matches';
+import MatchForm from '../../components/MatchForm';
+import { createMatch } from '../../api/matches';
 
 const CreateMatch = () => {
   const navigate = useNavigate();

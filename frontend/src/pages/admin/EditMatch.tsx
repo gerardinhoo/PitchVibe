@@ -1,8 +1,7 @@
-// src/pages/EditMatch.tsx
 import { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import MatchForm from '../components/MatchForm';
-import { fetchMatch, updatedMatch, type Match } from '../api/matches';
+import MatchForm from '../../components/MatchForm';
+import { fetchMatch, updatedMatch, type Match } from '../../api/matches';
 
 type MatchFormData = {
   homeTeam: string;

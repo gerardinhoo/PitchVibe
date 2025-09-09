@@ -1,1 +1,54 @@
 @import 'tailwindcss';
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+:root {
+  --pv-gradient: linear-gradient(
+    135deg,
+    #37003c 0%,
+    #4b2c8a 40%,
+    /* indigo */ #2453ff 75%,
+    /* royal blue */ #00c2ff 100% /* bright cyan */
+  );
+}
+
+body {
+  background: var(--pv-gradient) fixed no-repeat;
+  background-size: cover;
+  margin: 0;
+  position: relative;
+}
+
+/* Light, subtle scrim to keep text readable without killing color */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  /* slight top glow + very light darkening for contrast */
+  background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0) 40%
+    ),
+    linear-gradient(0deg, rgba(10, 12, 22, 0.22), rgba(10, 12, 22, 0.22));
+}
+
+/* On small screens avoid fixed attachment jank */
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+  }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #fff;
+  transition: background-color 9999s ease-in-out 0s;
+  box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.1) inset; /* keep glass look */
+}

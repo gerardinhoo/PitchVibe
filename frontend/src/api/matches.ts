@@ -1,3 +1,5 @@
+import { getToken } from './auth';
+
 export type Match = {
   id: string;
   homeTeam: string;
@@ -33,7 +35,10 @@ export async function fetchUpcomingMatches(
 export async function createMatch(input: NewMatch): Promise<Match> {
   const res = await fetch(`${BASE_URL}/api/matches`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}),
+    },
     body: JSON.stringify(input),
   });
 
@@ -82,7 +87,10 @@ export async function updatedMatch(
 ): Promise<Match> {
   const res = await fetch(`${BASE_URL}/api/matches/${encodeURIComponent(id)}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}),
+    },
     body: JSON.stringify(input),
   });
 
@@ -105,6 +113,7 @@ export async function updatedMatch(
 
 export async function deleteMatch(id: string): Promise<void> {
   const res = await fetch(`${BASE_URL}/api/matches/${encodeURIComponent(id)}`, {
+    headers: getToken() ? { Authorization: `Bearer ${getToken()}` } : undefined,
     method: 'DELETE',
   });
 
