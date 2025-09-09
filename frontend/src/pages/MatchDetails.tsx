@@ -1,7 +1,5 @@
-import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { upcomingMatches } from '../../data/upcomingMatches';
 import { fetchMatch, type Match } from '../api/matches';
 
 const MatchDetails = () => {
@@ -34,6 +32,17 @@ const MatchDetails = () => {
   if (!id) return <p className='p-6'>Invalid Match Id.</p>;
   if (loading) return <p className='p-6 text-gray-500'>Loading match…</p>;
 
+  if (error) {
+    return (
+      <div className='p-6 bg-red-50 text-red-700 rounded'>
+        <p>Couldn’t load match: {error}</p>
+        <Link to='/matches' className='underline mt-2 inline-block'>
+          ← Back to matches
+        </Link>
+      </div>
+    );
+  }
+
   if (!match) {
     return (
       <div className='flex flex-col items-center justify-center h-[70vh] text-center px-4'>
@@ -41,7 +50,7 @@ const MatchDetails = () => {
           Match not found.
         </p>
         <Link
-          to='/match'
+          to='/matches'
           className='px-5 py-2 rounded-md bg-white text-indigo-700 font-medium hover:bg-indigo-100 transition'
         >
           ← Back to Matches

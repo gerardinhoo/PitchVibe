@@ -5,8 +5,6 @@ import { Menu, X } from 'lucide-react';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-
   return (
     <nav className='bg-indigo-600 text-white px-4 py-3'>
       <div className='max-w-7xl mx-auto flex items-center justify-between'>
@@ -21,6 +19,7 @@ const Navbar = () => {
             PitchVibe
           </span>
         </Link>
+
         {/* Desktop Links */}
         <ul className='hidden md:flex gap-6 items-center'>
           <li>
@@ -44,12 +43,7 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link to='/match/10' className='hover:underline'>
-              Match Details
-            </Link>
-          </li>
-          <li>
-            <Link to='/match/create' className='hover:underline'>
+            <Link to='/create-match' className='hover:underline'>
               Create Match
             </Link>
           </li>
@@ -60,39 +54,44 @@ const Navbar = () => {
           </li>
         </ul>
 
-        {/* Mobile Menu Toggle */}
-        <button onClick={toggleMenu} className='md:hidden'>
+        {/* Mobile toggle */}
+        <button onClick={() => setIsOpen((v) => !v)} className='md:hidden'>
           {isOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
-      {/* Mobile Menu (Overlay style) */}
+      {/* Mobile Menu */}
       {isOpen && (
         <div className='md:hidden mt-3 px-4'>
           <ul className='flex flex-col gap-4 text-lg'>
             <li>
-              <Link to='/' onClick={toggleMenu} className='block'>
+              <Link to='/' onClick={() => setIsOpen(false)}>
                 Home
               </Link>
             </li>
             <li>
-              <Link to='/login' onClick={toggleMenu} className='block'>
+              <Link to='/login' onClick={() => setIsOpen(false)}>
                 Login
               </Link>
             </li>
             <li>
-              <Link to='/profile' onClick={toggleMenu} className='block'>
+              <Link to='/profile' onClick={() => setIsOpen(false)}>
                 Profile
               </Link>
             </li>
             <li>
-              <Link to='/matches' onClick={toggleMenu} className='block'>
+              <Link to='/matches' onClick={() => setIsOpen(false)}>
                 Matches
               </Link>
             </li>
             <li>
-              <Link to='/matches/10' onClick={toggleMenu} className='block'>
-                Match Details
+              <Link to='/create-match' onClick={() => setIsOpen(false)}>
+                Create Match
+              </Link>
+            </li>
+            <li>
+              <Link to='/admin/matches' onClick={() => setIsOpen(false)}>
+                Admin Matches
               </Link>
             </li>
           </ul>

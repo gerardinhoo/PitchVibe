@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { upcomingMatches } from '../../data/upcomingMatches';
 import MatchForm from '../components/MatchForm';
 import { createMatch } from '../api/matches';
 
