@@ -1,102 +1,101 @@
-// MatchForm.tsx
 import { useForm } from 'react-hook-form';
-import { teams } from '../../data/teams';
 
-type MatchFormData = {
+export type MatchFormValues = {
   homeTeam: string;
   awayTeam: string;
   location: string;
   date: string;
 };
 
-type Props = {
-  defaultValues?: MatchFormData;
-  onSubmit: (data: MatchFormData) => void;
-  mode?: 'create' | 'edit';
+type MatchFormProps = {
+  onSubmit: (data: MatchFormValues) => void | Promise<void>;
+  mode: 'create' | 'edit';
+  submitting?: boolean;
+  initialValues?: Partial<MatchFormValues>;
 };
 
-const MatchForm = ({ defaultValues, onSubmit, mode = 'create' }: Props) => {
+export default function MatchForm({
+  onSubmit,
+  mode,
+  submitting = false,
+  initialValues,
+}: MatchFormProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<MatchFormData>({ defaultValues });
+    formState: { isSubmitting, errors },
+  } = useForm<MatchFormValues>({
+    defaultValues: {
+      homeTeam: initialValues?.homeTeam ?? '',
+      awayTeam: initialValues?.awayTeam ?? '',
+      location: initialValues?.location ?? '',
+      date: initialValues?.date ?? '',
+    },
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
-      <h2 className='text-2xl font-bold mb-6'>
-        {mode === 'edit' ? 'Edit Match' : 'Create A New Match'}
-      </h2>
-
       <div>
-        <label className='block mb-1'>Home Team</label>
-        <select
-          {...register('homeTeam', { required: true })}
-          className='w-full p-2 rounded text-black'
-        >
-          <option value=''>Select Home Team</option>
-          {teams.map((team) => (
-            <option key={team.id} value={team.name}>
-              {team.name}
-            </option>
-          ))}
-        </select>
-        {errors.homeTeam && (
-          <p className='text-red-500 text-sm'>Home Team is required</p>
-        )}
-      </div>
-
-      <div>
-        <label className='block mb-1'>Away Team</label>
-        <select
-          {...register('awayTeam', { required: true })}
-          className='w-full p-2 rounded text-black'
-        >
-          <option value=''>Select Away Team</option>
-          {teams.map((team) => (
-            <option key={team.id} value={team.name}>
-              {team.name}
-            </option>
-          ))}
-        </select>
-        {errors.awayTeam && (
-          <p className='text-red-500 text-sm'>Away Team is required</p>
-        )}
-      </div>
-
-      <div>
-        <label className='block mb-1'>Location</label>
+        <label className='block text-sm mb-1'>Home Team</label>
         <input
-          type='text'
-          {...register('location', { required: true })}
-          className='w-full p-2 rounded text-black'
-          placeholder='e.g., Emirates Stadium, London'
+          className='w-full border rounded p-2 text-black'
+          placeholder='Arsenal'
+          {...register('homeTeam', { required: 'Home team is required' })}
+        />
+        {errors.homeTeam && (
+          <p className='text-red-400 text-sm mt-1'>{errors.homeTeam.message}</p>
+        )}
+      </div>
+
+      <div>
+        <label className='block text-sm mb-1'>Away Team</label>
+        <input
+          className='w-full border rounded p-2 text-black'
+          placeholder='Chelsea'
+          {...register('awayTeam', { required: 'Away team is required' })}
+        />
+        {errors.awayTeam && (
+          <p className='text-red-400 text-sm mt-1'>{errors.awayTeam.message}</p>
+        )}
+      </div>
+
+      <div>
+        <label className='block text-sm mb-1'>Stadium</label>
+        <input
+          className='w-full border rounded p-2 text-black'
+          placeholder='Emirates Stadium'
+          {...register('location', { required: 'Location is required' })}
         />
         {errors.location && (
-          <p className='text-red-500 text-sm'>Location is required</p>
+          <p className='text-red-400 text-sm mt-1'>{errors.location.message}</p>
         )}
       </div>
 
       <div>
-        <label className='block mb-1'>Match Date & Time</label>
+        <label className='block text-sm mb-1'>Date & Time</label>
         <input
           type='datetime-local'
-          {...register('date', { required: true })}
-          className='w-full p-2 rounded text-black'
+          className='w-full border rounded p-2 text-black'
+          {...register('date', { required: 'Date & time is required' })}
         />
         {errors.date && (
-          <p className='text-red-500 text-sm'>Date and time are required</p>
+          <p className='text-red-400 text-sm mt-1'>{errors.date.message}</p>
         )}
       </div>
 
       <button
         type='submit'
-        className='bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded'
+        disabled={submitting || isSubmitting}
+        className='px-4 py-2 rounded bg-indigo-600 text-white disabled:opacity-60'
       >
-        {mode === 'edit' ? 'Update Match' : 'Create Match'}
+        {submitting || isSubmitting
+          ? mode === 'edit'
+            ? 'Saving…'
+            : 'Creating…'
+          : mode === 'edit'
+          ? 'Save Changes'
+          : 'Create Match'}
       </button>
     </form>
   );
-};
-
-export default MatchForm;
+}

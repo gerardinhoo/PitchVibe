@@ -73,6 +73,54 @@ app.get('/api/matches/:id', (req, res) => {
 
   return res.json(match);
 });
+
+app.put('/api/matches/:id', (req, res) => {
+  const { id } = req.params;
+
+  const idx = upcomingMatches.findIndex((m) => String(m.id) === String(id));
+
+  if (idx === -1) return res.json(404).json({ message: 'Match not found' });
+
+  const { homeTeam, awayTeam, location, matchDateAndTime } = req.body ?? {};
+
+  if (!homeTeam || !awayTeam || !location || !matchDateAndTime) {
+    return res.status(404).json({ message: 'Missing required fields' });
+  }
+
+  const dt = new Date(matchDateAndTime);
+
+  if (Number.isNaN(dt.getTime())) {
+    return res.status(404).json({ message: 'Invalid Match Date And Time' });
+  }
+
+  const updated = {
+    ...upcomingMatches[idx],
+    homeTeam: String(homeTeam),
+    awayTeam: String(awayTeam),
+    location: String(location),
+    matchDateAndTime: dt.toISOString(),
+  };
+
+  upcomingMatches[idx] = updated;
+
+  return res.json(updated);
+});
+
+app.delete('/api/matches/:id', (req, res) => {
+  let { id } = req.params;
+
+  // Legacy numeric ids like "1" => "m-001"
+  if (/^\d+$/.test(id)) id = `m-${String(id).padStart(3, '0')}`;
+
+  const idx = upcomingMatches.findIndex((m) => String(m.id) === String(id));
+
+  if (idx === -1) return res.status(404).json({ message: 'Match not found' });
+
+  const [deleted] = upcomingMatches.splice(idx, 1);
+
+  return res.status(200).json({ id: deleted.id });
+});
+
 const PORT = 4000;
 
 app.listen(PORT, () =>

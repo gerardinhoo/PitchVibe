@@ -75,3 +75,43 @@ export async function fetchMatch(
     matchDateAndTime: String(data.matchDateAndTime),
   };
 }
+
+export async function updatedMatch(
+  id: string,
+  input: NewMatch
+): Promise<Match> {
+  const res = await fetch(`${BASE_URL}/api/matches/${encodeURIComponent(id)}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  });
+
+  if (!res.ok) {
+    const msg = await res.text().catch(() => '');
+    throw new Error(
+      `Failed to update match (${res.status}) ${msg || ''}`.trim()
+    );
+  }
+
+  const data = await res.json();
+  return {
+    id: String(data.id),
+    homeTeam: String(data.homeTeam),
+    awayTeam: String(data.awayTeam),
+    location: String(data.location),
+    matchDateAndTime: String(data.matchDateAndTime),
+  };
+}
+
+export async function deleteMatch(id: string): Promise<void> {
+  const res = await fetch(`${BASE_URL}/api/matches/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+  });
+
+  if (!res.ok) {
+    const msg = await res.text().catch(() => '');
+    throw new Error(
+      `Failed to delete match (${res.status}) ${msg || ''}`.trim()
+    );
+  }
+}

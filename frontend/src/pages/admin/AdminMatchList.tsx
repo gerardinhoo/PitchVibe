@@ -1,66 +1,102 @@
-import React, { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { upcomingMatches as initialMatches } from '../../../data/upcomingMatches';
+import {
+  fetchUpcomingMatches,
+  deleteMatch,
+  type Match,
+} from '../../api/matches';
 
-const AdminMatchList = () => {
-  const [matches, setMatches] = useState(initialMatches);
+export default function AdminMatches() {
+  const [matches, setMatches] = useState<Match[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const handleDelete = (id: number) => {
-    const confirmDelete = window.confirm(
-      'Are you sure you want to delete this match?'
-    );
+  const load = useCallback((signal?: AbortSignal) => {
+    setLoading(true);
+    setError(null);
 
-    if (!confirmDelete) return;
+    fetchUpcomingMatches(signal)
+      .then(setMatches)
+      .catch((e: any) => {
+        const isAbort =
+          e?.name === 'AbortError' ||
+          String(e?.message || '')
+            .toLowerCase()
+            .includes('abort');
+        if (!isAbort) setError(e?.message || 'Failed to load matches');
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
-    const updatedMatches = matches.filter((match) => match.id !== id);
-    setMatches(updatedMatches);
+  useEffect(() => {
+    const controller = new AbortController();
+    load(controller.signal);
+    return () => controller.abort();
+  }, [load]);
+
+  const onDelete = async (id: string) => {
+    if (!window.confirm('Delete this match? This cannot be undone.')) return;
+    setDeletingId(id);
+    setError(null);
+    try {
+      await deleteMatch(id);
+      // optimistic remove
+      setMatches((prev) => (prev ? prev.filter((m) => m.id !== id) : prev));
+    } catch (e: any) {
+      setError(e?.message || 'Failed to delete match');
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   return (
     <div className='p-6'>
       <h2 className='text-3xl font-bold mb-6'>All Matches (Admin View)</h2>
 
-      {matches.length === 0 && (
-        <p className='text-gray-400'>No Matches Available</p>
+      {loading && <p className='text-gray-500'>Loading…</p>}
+      {error && (
+        <div className='bg-red-50 text-red-700 p-3 rounded'>{error}</div>
       )}
 
-      {matches.map((match) => (
-        <div
-          key={match.id}
-          className='bg-white text-black p-4 rounded shadow mb-4 flex justify-between items-center'
-        >
-          <div>
-            <h3 className='text-xl font-semibold'>
-              {match.homeTeam ?? 'TBD'} vs {match.awayTeam ?? 'TBD'}
-            </h3>
-            <p className='text-sm text-gray-700'>
-              {match.matchDateAndTime.toLocaleString()} – {match.location}
-            </p>
-          </div>
-          <div className='flex gap-4'>
-            <Link
-              to={`/match/${match.id}`}
-              className='text-indigo-600 underline'
-            >
-              View
-            </Link>
-            <Link
-              to={`/admin/match/${match.id}/edit`}
-              className='text-yellow-700 hover:underline'
-            >
-              Edit
-            </Link>
-            <button
-              onClick={() => handleDelete(match.id)}
-              className='text-red-600 hover:underline'
-            >
-              Delete
-            </button>
-          </div>
+      {!loading && !error && matches && (
+        <div className='space-y-4'>
+          {matches.map((m) => (
+            <div key={m.id} className='bg-white text-black p-4 rounded shadow'>
+              <h3 className='text-xl font-semibold'>
+                {m.homeTeam} vs {m.awayTeam}
+              </h3>
+              <p className='text-sm text-gray-700'>
+                {new Date(m.matchDateAndTime).toLocaleString()} — {m.location}
+              </p>
+              <div className='flex gap-4 mt-2'>
+                <Link
+                  to={`/matches/${m.id}`}
+                  className='text-indigo-600 underline'
+                >
+                  View
+                </Link>
+                <Link
+                  to={`/admin/matches/${m.id}/edit`}
+                  className='text-yellow-700'
+                >
+                  Edit
+                </Link>
+                <button
+                  onClick={() => onDelete(m.id)}
+                  disabled={deletingId === m.id}
+                  className='text-red-700 disabled:opacity-60'
+                >
+                  {deletingId === m.id ? 'Deleting…' : 'Delete'}
+                </button>
+              </div>
+            </div>
+          ))}
+          {matches.length === 0 && (
+            <p className='text-gray-500'>No matches found.</p>
+          )}
         </div>
-      ))}
+      )}
     </div>
   );
-};
-
-export default AdminMatchList;
+}
